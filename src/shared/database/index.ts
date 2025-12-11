@@ -1,7 +1,8 @@
 import { Sequelize } from 'sequelize';
-import { globSync } from 'glob';
+import glob from 'glob';
 import path from 'path';
 import { environment } from '../../config/environment';
+import { associateModels } from './associateModels';
 
 // Initialize Sequelize
 const sequelize = new Sequelize(
@@ -44,12 +45,12 @@ const loadModels = () => {
 
   const searchPattern = `${rootDir}/**/entities/*.entity.{ts,js}`;
 
-  const files = globSync(searchPattern, {
+  const files = glob.sync(searchPattern, {
     cwd: process.cwd(),
     ignore: ['**/*.d.ts']
   });
 
-  files.forEach((file) => {
+  files.forEach((file: string) => {
     // Import model
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const modelDef = require(path.resolve(process.cwd(), file));
@@ -70,11 +71,7 @@ const loadModels = () => {
   });
 
   // Execute associate if exists
-  Object.keys(models).forEach((modelName) => {
-    if (models[modelName].associate) {
-      models[modelName].associate(models);
-    }
-  });
+  associateModels(models);
 };
 
 // Initial load

@@ -21,7 +21,7 @@
     "dotenv": "*",
     "express": "*",
     "express-validator": "*",
-    "glob": "^13.0.0",
+    "glob": "^8.1.0",
     "helmet": "*",
     "jsonwebtoken": "*",
     "multer": "*",
